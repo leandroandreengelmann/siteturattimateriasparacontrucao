@@ -1,0 +1,21 @@
+{
+    "name": "Turatti Materiais",
+    "short_name": "Turatti",
+    "description": "Descubra o auge do design e sofisticação com a Turatti.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "icons": [
+        {
+            "src": "/file.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/file.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
