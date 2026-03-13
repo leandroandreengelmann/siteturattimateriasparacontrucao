@@ -20,6 +20,7 @@ import { cn } from '@/lib/utils'
 
 import { Store, StoresService } from '@/services/store-service'
 import { Seller, SellerService } from '@/services/seller-service'
+import { revalidatePage } from '@/app/actions/revalidate'
 
 const storeSchema = z.object({
     name: z.string().min(1, 'Nome é obrigatório').max(100),
@@ -158,6 +159,7 @@ export default function StoreForm({ initialData }: StoreFormProps) {
                 await StoresService.createStore(data)
                 toast.success('Loja criada com sucesso')
             }
+            await revalidatePage('/nossas-lojas')
             router.push('/admin/stores')
             router.refresh()
         } catch (error) {

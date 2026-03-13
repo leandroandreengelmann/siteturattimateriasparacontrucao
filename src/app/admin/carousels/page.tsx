@@ -5,6 +5,7 @@ import AdminLayout from '@/components/admin/admin-layout'
 import { CarouselService, CarouselWithProducts } from '@/services/carousel-service'
 import { ProductService } from '@/services/product-service'
 import { toast } from 'sonner'
+import { revalidatePage } from '@/app/actions/revalidate'
 import { motion } from 'framer-motion'
 import {
     LayoutDashboard,
@@ -76,6 +77,7 @@ export default function AdminCarouselsPage() {
             await CarouselService.updateCarousel(id, updates)
             toast.success('Configurações atualizadas')
             loadData()
+            await revalidatePage('/')
         } catch (error) {
             toast.error('Erro ao salvar')
         } finally {
@@ -98,6 +100,7 @@ export default function AdminCarouselsPage() {
             await CarouselService.syncCarouselProducts(carousel.id, newProductIds)
             toast.success('Produtos atualizados')
             loadData()
+            await revalidatePage('/')
         } catch (error) {
             toast.error('Erro ao atualizar produtos')
         } finally {

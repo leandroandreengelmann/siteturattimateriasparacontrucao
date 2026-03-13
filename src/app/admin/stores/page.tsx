@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import AdminLayout from '@/components/admin/admin-layout'
 import { Store, StoresService } from '@/services/store-service'
+import { revalidatePage } from '@/app/actions/revalidate'
 import {
     Plus,
     Pencil,
@@ -70,6 +71,7 @@ export default function StoresPage() {
             }
             toast.success('Loja excluída com sucesso')
             loadStores()
+            await revalidatePage('/nossas-lojas')
         } catch (error) {
             toast.error('Erro ao excluir loja')
         }
@@ -80,6 +82,7 @@ export default function StoresPage() {
             await StoresService.updateStore(id, { is_active: !currentStatusValue })
             toast.success('Status atualizado')
             loadStores()
+            await revalidatePage('/nossas-lojas')
         } catch (error) {
             toast.error('Erro ao atualizar status')
         }

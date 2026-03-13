@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { ImageCarouselService, HomeImageCarousel } from '@/services/image-carousel-service'
 import { UploadService } from '@/services/upload-service'
 import { toast } from 'sonner'
+import { revalidatePage } from '@/app/actions/revalidate'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -58,6 +59,7 @@ export default function ImageCarouselAdmin() {
             setNewLink('')
             if (fileInputRef.current) fileInputRef.current.value = ''
             await loadImages()
+            await revalidatePage('/')
 
         } catch (error) {
             console.error(error)
@@ -75,6 +77,7 @@ export default function ImageCarouselAdmin() {
             await UploadService.removeImage('product-images', url)
             toast.success('Imagem removida com sucesso')
             await loadImages()
+            await revalidatePage('/')
         } catch (error) {
             console.error(error)
             toast.error('Erro ao remover imagem')
@@ -86,6 +89,7 @@ export default function ImageCarouselAdmin() {
             await ImageCarouselService.updateImage(id, { is_active: !currentState })
             toast.success(currentState ? 'Imagem desativada' : 'Imagem ativada')
             setImages(images.map(img => img.id === id ? { ...img, is_active: !currentState } : img))
+            await revalidatePage('/')
         } catch (error) {
             toast.error('Erro ao alterar status')
         }
@@ -95,6 +99,7 @@ export default function ImageCarouselAdmin() {
         try {
             await ImageCarouselService.updateImage(id, { link_url: link })
             toast.success('Link atualizado')
+            await revalidatePage('/')
         } catch (error) {
             toast.error('Erro ao atualizar link')
         }
@@ -124,6 +129,7 @@ export default function ImageCarouselAdmin() {
         try {
             await ImageCarouselService.updateOrder(updates)
             toast.success('Ordem atualizada')
+            await revalidatePage('/')
         } catch (error) {
             toast.error('Erro ao atualizar a ordem')
             loadImages() // revert on fail

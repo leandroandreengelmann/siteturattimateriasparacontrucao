@@ -5,6 +5,7 @@ import { Layers, Check, ImagePlus, Loader2, Trash2, GripVertical, AlertCircle } 
 import RichTextEditor from '@/components/ui/rich-text-editor'
 import { AboutService, type AboutSettings, type AboutImage } from '@/services/about-service'
 import { toast } from 'sonner'
+import { revalidatePage } from '@/app/actions/revalidate'
 import { motion, Reorder } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
@@ -28,6 +29,7 @@ export default function SobreNosClient({ initialSettings, initialImages }: Sobre
         try {
             await AboutService.updateSettings(content)
             toast.success('Conteúdo salvo com sucesso!')
+            await revalidatePage('/sobre-nos')
         } catch (error) {
             toast.error('Erro ao salvar o conteúdo')
         } finally {
@@ -46,6 +48,7 @@ export default function SobreNosClient({ initialSettings, initialImages }: Sobre
             const newImage = await AboutService.addImage(file, images.length)
             setImages(prev => [...prev, newImage])
             toast.success('Imagem adicionada!')
+            await revalidatePage('/sobre-nos')
         } catch (error) {
             toast.error('Erro ao fazer upload da imagem')
         } finally {
@@ -61,6 +64,7 @@ export default function SobreNosClient({ initialSettings, initialImages }: Sobre
                 await AboutService.deleteImage(id, url)
                 setImages(prev => prev.filter(img => img.id !== id))
                 toast.success('Imagem removida')
+                await revalidatePage('/sobre-nos')
             } catch (error) {
                 toast.error('Erro ao excluir a imagem')
             }
@@ -74,6 +78,7 @@ export default function SobreNosClient({ initialSettings, initialImages }: Sobre
         try {
             const updates = newOrder.map((img, idx) => ({ id: img.id, display_order: idx }))
             await AboutService.updateImageOrders(updates)
+            await revalidatePage('/sobre-nos')
         } catch (error) {
             toast.error('Erro ao salvar a nova ordem')
         } finally {

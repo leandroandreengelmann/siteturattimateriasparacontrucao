@@ -4,6 +4,7 @@ import React, { useState, useTransition, useRef } from 'react'
 import { Palette, Plus, Pencil, Trash2, Eye, EyeOff, Check, X, Upload, Link, ImagePlus, Loader2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import type { SunvinilColor, SunvinilColorImage, InsertSunvinilColor } from '@/services/color-service'
+import { revalidatePage } from '@/app/actions/revalidate'
 
 // ---- Helpers ----
 function getContrastColor(hex: string): string {
@@ -105,6 +106,7 @@ export default function ColorsClient({ initialColors, initialSettings }: ColorsC
                     setUploadingColorId(created.id)
                 }
 
+                await revalidatePage('/')
                 setEditingId(null)
                 setShowForm(false)
                 setError(null)
@@ -120,6 +122,7 @@ export default function ColorsClient({ initialColors, initialSettings }: ColorsC
                 const { ColorService } = await import('@/services/color-service')
                 const updated = await ColorService.updateColor(color.id, { is_active: !color.is_active })
                 setColors(prev => prev.map(c => c.id === color.id ? { ...updated, images: c.images } : c))
+                await revalidatePage('/')
             } catch {
                 setError('Erro ao alterar status.')
             }
@@ -133,6 +136,7 @@ export default function ColorsClient({ initialColors, initialSettings }: ColorsC
                 const { ColorService } = await import('@/services/color-service')
                 await ColorService.deleteColor(id)
                 setColors(prev => prev.filter(c => c.id !== id))
+                await revalidatePage('/')
             } catch {
                 setError('Erro ao excluir.')
             }
@@ -154,6 +158,7 @@ export default function ColorsClient({ initialColors, initialSettings }: ColorsC
                     ? { ...c, images: [...(c.images || []), newImage] }
                     : c
             ))
+            await revalidatePage('/')
         } catch {
             setError('Erro ao fazer upload da imagem.')
         } finally {
@@ -171,6 +176,7 @@ export default function ColorsClient({ initialColors, initialSettings }: ColorsC
                         ? { ...c, images: (c.images || []).filter(img => img.id !== imageId) }
                         : c
                 ))
+                await revalidatePage('/')
             } catch {
                 setError('Erro ao excluir imagem.')
             }
@@ -182,6 +188,7 @@ export default function ColorsClient({ initialColors, initialSettings }: ColorsC
         try {
             const { ColorService } = await import('@/services/color-service')
             await ColorService.updateSettings(sectionTitle)
+            await revalidatePage('/')
         } catch {
             setError('Erro ao salvar título da seção.')
         } finally {
