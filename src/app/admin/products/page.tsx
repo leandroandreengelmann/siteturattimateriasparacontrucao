@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import AdminLayout from '@/components/admin/admin-layout'
 import { ProductService } from '@/services/product-service'
-import { revalidatePage } from '@/app/actions/revalidate'
+import { revalidatePage, revalidateLayout } from '@/app/actions/revalidate'
 import {
     Plus,
     Pencil,
@@ -78,7 +78,8 @@ export default function ProductsPage() {
             await ProductService.deleteProduct(id)
             toast.success('Produto excluído com sucesso')
             loadData()
-            await revalidatePage('/produtos')
+            await revalidatePage('/')
+            await revalidateLayout('/produtos')
         } catch (error) {
             toast.error('Erro ao excluir produto')
         }
@@ -89,7 +90,8 @@ export default function ProductsPage() {
             await ProductService.duplicateProduct(id)
             toast.success('Produto duplicado com sucesso')
             loadData()
-            await revalidatePage('/produtos')
+            await revalidatePage('/')
+            await revalidateLayout('/produtos')
         } catch (error) {
             toast.error('Erro ao duplicar produto')
         }
@@ -106,7 +108,8 @@ export default function ProductsPage() {
             await ProductService.updateProduct(id, { is_active: !currentStatusValue })
             toast.success('Status atualizado')
             loadData()
-            await revalidatePage('/produtos')
+            await revalidatePage('/')
+            await revalidateLayout('/produtos')
         } catch (error) {
             toast.error('Erro ao atualizar status')
         }

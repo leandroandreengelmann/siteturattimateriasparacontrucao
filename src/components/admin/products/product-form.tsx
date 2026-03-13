@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ProductService, createProductSchema } from '@/services/product-service'
 import { CategoryService } from '@/services/category-service'
-import { revalidatePage } from '@/app/actions/revalidate'
+import { revalidatePage, revalidateLayout } from '@/app/actions/revalidate'
 import {
     Loader2,
     ChevronRight,
@@ -141,7 +141,8 @@ export default function ProductForm({ initialData, isEditing = false }: ProductF
                 await ProductService.createProduct(data)
                 toast.success('Produto criado com sucesso')
             }
-            await revalidatePage('/produtos')
+            await revalidatePage('/')
+            await revalidateLayout('/produtos')
             router.push('/admin/products')
             router.refresh()
         } catch (error) {
