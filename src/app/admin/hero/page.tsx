@@ -97,6 +97,11 @@ export default function AdminHeroPage() {
                 button_url: data.button_url
             }
             await HeroService.updateHeroSettings(formattedData)
+            
+            // Revalidar a home para limpar o cache estático
+            const { revalidatePage } = await import('@/app/actions/revalidate')
+            await revalidatePage('/')
+
             toast.success('Hero atualizada com sucesso!')
             setPreviewData({ ...formattedData, id: '', updated_at: '' } as HeroSettings)
         } catch (error) {

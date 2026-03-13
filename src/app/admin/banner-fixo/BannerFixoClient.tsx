@@ -60,6 +60,11 @@ export default function BannerFixoClient({ initialSettings }: BannerFixoClientPr
                 },
                 imageFile
             )
+
+            // Revalidar a home para limpar o cache estático
+            const { revalidatePage } = await import('@/app/actions/revalidate')
+            await revalidatePage('/')
+
             toast.success('Configurações do banner salvas com sucesso!')
             const updated = await FixedBannerService.getSettings()
             setSettings(updated)
