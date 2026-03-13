@@ -45,5 +45,4 @@ ts_errors*.txt
 test_products.json
 
 # ai agents
-.agent/
-.agents/
+
